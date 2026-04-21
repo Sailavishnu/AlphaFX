@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA — The Operating System for Calm Homes</title>
+  <meta name="description" content="AURA orchestrates every room, every sensor, every moment.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Boot Sequence -->
+  <div id="boot" aria-hidden="true">
+    <canvas id="boot-canvas"></canvas>
+    <div id="boot-wordmark"><span id="boot-letters"></span></div>
+  </div>
+
+  <!-- Theme transition -->
+  <div id="theme-ripple" aria-hidden="true"></div>
+
+  <!-- Cosmic aurora background -->
+  <div class="aurora" aria-hidden="true">
+    <div class="aurora-blob ab-1"></div>
+    <div class="aurora-blob ab-2"></div>
+    <div class="aurora-blob ab-3"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav id="nav" role="navigation" aria-label="Main">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-brand" aria-label="AURA home">
+        <svg class="brand-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <circle cx="14" cy="14" r="4" class="bm-core"/>
+          <circle cx="14" cy="14" r="9" class="bm-ring" stroke-dasharray="3 2"/>
+          <circle cx="14" cy="14" r="2" class="bm-node" id="bm-node"/>
+        </svg>
+        <span class="brand-name">AURA</span>
+      </a>
+      <div class="nav-links" role="list">
+        <a href="#controls" class="nav-link" role="listitem" data-mag>Controls</a>
+        <a href="#devices" class="nav-link" role="listitem" data-mag>Devices</a>
+        <a href="#timeline" class="nav-link" role="listitem" data-mag>Automations</a>
+      </div>
+      <div class="nav-end">
+        <span class="nav-status" aria-live="polite">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span class="mono fs-xs">14 DEVICES</span>
+        </span>
+        <button class="theme-btn" id="theme-btn" aria-label="Toggle theme" data-mag>
+          <svg viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="4.5" class="sun-body"/>
+            <g class="sun-spokes">
+              <line x1="11" y1="1" x2="11" y2="3.5" stroke-linecap="round"/>
+              <line x1="11" y1="18.5" x2="11" y2="21" stroke-linecap="round"/>
+              <line x1="1" y1="11" x2="3.5" y2="11" stroke-linecap="round"/>
+              <line x1="18.5" y1="11" x2="21" y2="11" stroke-linecap="round"/>
+              <line x1="4.05" y1="4.05" x2="5.82" y2="5.82" stroke-linecap="round"/>
+              <line x1="16.18" y1="16.18" x2="17.95" y2="17.95" stroke-linecap="round"/>
+              <line x1="4.05" y1="17.95" x2="5.82" y2="16.18" stroke-linecap="round"/>
+              <line x1="16.18" y1="5.82" x2="17.95" y2="4.05" stroke-linecap="round"/>
+            </g>
+            <path class="moon-path" d="M 15 7 Q 9 9 8 15 Q 7 20 13 21 Q 5 22 3 15 Q 1 7 9 4 Z" opacity="0"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="nav-progress" class="nav-progress" aria-hidden="true"></div>
+  </nav>
+
+  <!-- Landing Page Overlay -->
+  <div id="landing-overlay" class="landing-overlay">
+    <img src="landing-screenshot.png" alt="AURA Home Dashboard Preview" class="landing-img" />
+    <button class="landing-enter-btn" onclick="document.getElementById('landing-overlay').style.display='none';">
+      Enter Experience
+    </button>
+  </div>
+
+  <main>
+
+    <!-- Hero -->
+    <section id="hero" class="s-hero" aria-labelledby="hero-h1">
+      <div class="hero-inner">
+
+        <div class="hero-copy" data-parallax="0.25">
+          <p class="hero-eyebrow mono" aria-live="polite">
+            <span class="live-dot" aria-hidden="true"></span>
+            LIVE · <span id="hero-count">14</span> DEVICES · 3 ROOMS
+          </p>
+          <h1 id="hero-h1" class="hero-headline">
+            <span class="hw" aria-hidden="true">Your home,</span>
+            <span class="hw italic-serif" aria-hidden="true">quietly</span>
+            <span class="hw" aria-hidden="true">intelligent.</span>
+            <span class="sr-only">Your home, quietly intelligent.</span>
+          </h1>
+          <p class="hero-sub">AURA orchestrates every room, every sensor, every moment — so your environment adapts before you ask.</p>
+          <div class="hero-cta">
+            <button class="btn-ghost" id="cta-btn" data-cursor="explore" data-mag>
+              <span>Explore the Interface</span>
+              <svg viewBox="0 0 18 18" fill="none" aria-hidden="true" width="16" height="16">
+                <path d="M3 9h12M9 3l6 6-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-visual" data-parallax="0.1" aria-hidden="true">
+          <div class="fp-wrap">
+            <svg id="hero-fp" viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="rg-liv" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" class="rg-warm" stop-opacity="0.45"/>
+                  <stop offset="100%" class="rg-warm" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="rg-bed" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" class="rg-warm" stop-opacity="0.45"/>
+                  <stop offset="100%" class="rg-warm" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="rg-kit" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" class="rg-warm" stop-opacity="0.45"/>
+                  <stop offset="100%" class="rg-warm" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="rg-bath" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" class="rg-warm" stop-opacity="0.45"/>
+                  <stop offset="100%" class="rg-warm" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <!-- Walls -->
+              <rect x="16" y="16" width="348" height="268" rx="4" class="fp-wall" fill="none" stroke-width="1.5"/>
+              <line x1="190" y1="16" x2="190" y2="174" class="fp-wall" stroke-width="1"/>
+              <line x1="16" y1="174" x2="364" y2="174" class="fp-wall" stroke-width="1"/>
+              <!-- Room fills -->
+              <rect x="18" y="18" width="170" height="154" rx="3" class="fp-room" data-room="living" fill="none"/>
+              <rect x="192" y="18" width="170" height="154" rx="3" class="fp-room" data-room="bedroom" fill="none"/>
+              <rect x="18" y="176" width="170" height="106" rx="3" class="fp-room" data-room="kitchen" fill="none"/>
+              <rect x="192" y="176" width="170" height="106" rx="3" class="fp-room" data-room="bathroom" fill="none"/>
+              <!-- Light blooms -->
+              <ellipse cx="103" cy="95" rx="72" ry="58" class="fp-bloom" data-room="living" fill="url(#rg-liv)"/>
+              <ellipse cx="277" cy="95" rx="72" ry="58" class="fp-bloom" data-room="bedroom" fill="url(#rg-bed)"/>
+              <ellipse cx="103" cy="229" rx="72" ry="44" class="fp-bloom" data-room="kitchen" fill="url(#rg-kit)"/>
+              <ellipse cx="277" cy="229" rx="72" ry="44" class="fp-bloom" data-room="bathroom" fill="url(#rg-bath)"/>
+              <!-- Labels -->
+              <text x="103" y="99" class="fp-lbl" text-anchor="middle">Living</text>
+              <text x="277" y="99" class="fp-lbl" text-anchor="middle">Bedroom</text>
+              <text x="103" y="233" class="fp-lbl" text-anchor="middle">Kitchen</text>
+              <text x="277" y="233" class="fp-lbl" text-anchor="middle">Bath</text>
+              <!-- Windows -->
+              <rect x="52" y="14" width="48" height="4" rx="2" class="fp-window"/>
+              <rect x="240" y="14" width="48" height="4" rx="2" class="fp-window"/>
+              <!-- Doors -->
+              <path d="M155 174 Q155 158 171 158" class="fp-door" fill="none"/>
+              <path d="M345 174 Q345 158 329 158" class="fp-door" fill="none"/>
+              <!-- Signal particles -->
+              <circle r="2.5" class="fp-signal">
+                <animateMotion dur="3.5s" repeatCount="indefinite" path="M103,95 Q190,80 277,95"/>
+              </circle>
+              <circle r="2" class="fp-signal" opacity="0.7">
+                <animateMotion dur="4.5s" repeatCount="indefinite" begin="1.2s" path="M103,229 Q190,160 277,95"/>
+              </circle>
+              <circle r="1.5" class="fp-signal" opacity="0.5">
+                <animateMotion dur="5.5s" repeatCount="indefinite" begin="2.5s" path="M277,229 Q290,160 277,95"/>
+              </circle>
+            </svg>
+          </div>
+          <div class="hero-metrics" aria-label="Home metrics">
+            <div class="metric-chip">
+              <span class="mono metric-val" id="hm-temp">21.4°</span>
+              <span class="metric-lbl">Indoor</span>
+            </div>
+            <div class="metric-chip">
+              <span class="mono metric-val">68%</span>
+              <span class="metric-lbl">Humidity</span>
+            </div>
+            <div class="metric-chip">
+              <span class="mono metric-val">2.4kW</span>
+              <span class="metric-lbl">Power</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <section id="controls" class="s-controls" aria-labelledby="ctrl-h2">
+      <div class="section-header reveal-item">
+        <h2 id="ctrl-h2" class="section-title"><em>Orchestrate</em> your environment</h2>
+        <p class="section-sub">Every system. One interface. Total calm.</p>
+      </div>
+
+      <!-- Scenes -->
+      <div class="scenes-wrap reveal-item" role="group" aria-label="Scene presets">
+        <p class="scenes-eyebrow mono">SCENES</p>
+        <div class="scenes-grid">
+
+          <button class="scene-card" data-scene="morning" data-cursor="activate" aria-label="Activate Morning scene">
+            <div class="scene-ico">
+              <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                <circle cx="22" cy="26" r="9" class="sc-sun"/>
+                <path d="M22 17V10" class="sc-ray" stroke-linecap="round"/>
+                <path d="M5 26H14" class="sc-ray" stroke-linecap="round"/>
+                <path d="M30 26H39" class="sc-ray" stroke-linecap="round"/>
+                <path d="M8 13l5.5 5.5" class="sc-ray" stroke-linecap="round"/>
+                <path d="M36 13l-5.5 5.5" class="sc-ray" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="scene-name">Morning</span>
+            <span class="scene-meta mono">22° · 70% warm</span>
+          </button>
+
+          <button class="scene-card" data-scene="focus" data-cursor="activate" aria-label="Activate Focus scene">
+            <div class="scene-ico">
+              <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                <circle cx="22" cy="22" r="7" class="sc-focus"/>
+                <circle cx="22" cy="22" r="13" class="sc-ring" stroke-dasharray="3.5 3"/>
+                <line x1="22" y1="4" x2="22" y2="8" class="sc-ray" stroke-linecap="round"/>
+                <line x1="22" y1="36" x2="22" y2="40" class="sc-ray" stroke-linecap="round"/>
+                <line x1="4" y1="22" x2="8" y2="22" class="sc-ray" stroke-linecap="round"/>
+                <line x1="36" y1="22" x2="40" y2="22" class="sc-ray" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="scene-name">Focus</span>
+            <span class="scene-meta mono">20° · 100% cool</span>
+          </button>
+
+          <button class="scene-card" data-scene="cinema" data-cursor="activate" aria-label="Activate Cinema scene">
+            <div class="scene-ico">
+              <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                <rect x="7" y="11" width="30" height="20" rx="3" class="sc-screen"/>
+                <rect x="11" y="15" width="22" height="12" rx="1" class="sc-inner" opacity="0.2"/>
+                <path d="M18 31l-3 6h14l-3-6" class="sc-stand" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="22" cy="21" r="3.5" class="sc-glow" opacity="0.4"/>
+              </svg>
+            </div>
+            <span class="scene-name">Cinema</span>
+            <span class="scene-meta mono">19° · 15% warm</span>
+          </button>
+
+          <button class="scene-card" data-scene="sleep" data-cursor="activate" aria-label="Activate Sleep scene">
+            <div class="scene-ico">
+              <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
+                <path d="M28 11Q18 15 16 26Q14 36 24 40Q13 42 8 33Q3 23 10 16Q17 7 28 11Z" class="sc-moon"/>
+                <circle cx="34" cy="13" r="1.5" fill="currentColor" opacity="0.5"/>
+                <circle cx="37" cy="21" r="1" fill="currentColor" opacity="0.4"/>
+                <circle cx="32" cy="22" r="0.8" fill="currentColor" opacity="0.35"/>
+              </svg>
+            </div>
+            <span class="scene-name">Sleep</span>
+            <span class="scene-meta mono">18° · All off</span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Bento -->
+      <div class="bento" role="region" aria-label="Home controls">
+
+        <!-- Lights — Hero tile -->
+        <article class="tile tile-lights tile-hero reveal-item" aria-labelledby="lh" data-domain="lights">
+          <header class="tile-hd">
+            <div class="tile-ttl-grp">
+              <span class="tile-ico" aria-hidden="true">
+                <svg viewBox="0 0 18 18" fill="none">
+                  <circle cx="9" cy="7.5" r="3.5" class="bulb-g"/>
+                  <path d="M7 11q0 2 2 2t2-2" class="bulb-b" stroke-linecap="round"/>
+                  <line x1="9" y1="13" x2="9" y2="15" stroke-linecap="round"/>
+                  <path d="M9 4V2M5 5l-1-1M13 5l1-1M3.5 7.5H2M16 7.5h-1.5" class="bulb-r" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <h3 id="lh" class="tile-title">Lights</h3>
+            </div>
+            <span class="tile-stat mono" id="lights-stat">4 of 4 on</span>
+          </header>
+
+          <div class="lights-body">
+            <!-- Mini floorplan -->
+            <div class="lights-fp" aria-hidden="true">
+              <svg id="lfp" viewBox="0 0 260 165" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="lg-liv" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="oklch(0.82 0.15 75)" stop-opacity="0.5"/>
+                    <stop offset="100%" stop-color="oklch(0.82 0.15 75)" stop-opacity="0"/>
+                  </radialGradient>
+                  <radialGradient id="lg-bed" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="oklch(0.82 0.15 75)" stop-opacity="0.5"/>
+                    <stop offset="100%" stop-color="oklch(0.82 0.15 75)" stop-opacity="0"/>
+                  </radialGradient>
+                  <radialGradient id="lg-kit" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="oklch(0.82 0.15 75)" stop-opacity="0.5"/>
+                    <stop offset="100%" stop-color="oklch(0.82 0.15 75)" stop-opacity="0"/>
+                  </radialGradient>
+                  <radialGradient id="lg-bath" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="oklch(0.82 0.15 75)" stop-opacity="0.5"/>
+                    <stop offset="100%" stop-color="oklch(0.82 0.15 75)" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <rect x="3" y="3" width="120" height="82" rx="4" class="lfp-room" data-room="living"/>
+                <rect x="136" y="3" width="120" height="82" rx="4" class="lfp-room" data-room="bedroom"/>
+                <rect x="3" y="98" width="120" height="64" rx="4" class="lfp-room" data-room="kitchen"/>
+                <rect x="136" y="98" width="120" height="64" rx="4" class="lfp-room" data-room="bathroom"/>
+                <ellipse cx="63" cy="44" rx="52" ry="36" class="lfp-bloom" data-room="living" fill="url(#lg-liv)"/>
+                <ellipse cx="196" cy="44" rx="52" ry="36" class="lfp-bloom" data-room="bedroom" fill="url(#lg-bed)"/>
+                <ellipse cx="63" cy="130" rx="52" ry="28" class="lfp-bloom" data-room="kitchen" fill="url(#lg-kit)"/>
+                <ellipse cx="196" cy="130" rx="52" ry="28" class="lfp-bloom" data-room="bathroom" fill="url(#lg-bath)"/>
+                <text x="63" y="47" class="lfp-lbl" text-anchor="middle">Living</text>
+                <text x="196" y="47" class="lfp-lbl" text-anchor="middle">Bedroom</text>
+                <text x="63" y="133" class="lfp-lbl" text-anchor="middle">Kitchen</text>
+                <text x="196" y="133" class="lfp-lbl" text-anchor="middle">Bath</text>
+              </svg>
+            </div>
+
+            <!-- Toggles -->
+            <div class="room-toggles" role="group" aria-label="Room lights">
+              <div class="rt-row">
+                <span class="rt-name">Living</span>
+                <label class="sw" aria-label="Living room lights">
+                  <input type="checkbox" class="sw-input" data-room="living" checked>
+                  <span class="sw-track"><span class="sw-thumb"></span></span>
+                </label>
+              </div>
+              <div class="rt-row">
+                <span class="rt-name">Bedroom</span>
+                <label class="sw" aria-label="Bedroom lights">
+                  <input type="checkbox" class="sw-input" data-room="bedroom" checked>
+                  <span class="sw-track"><span class="sw-thumb"></span></span>
+                </label>
+              </div>
+              <div class="rt-row">
+                <span class="rt-name">Kitchen</span>
+                <label class="sw" aria-label="Kitchen lights">
+                  <input type="checkbox" class="sw-input" data-room="kitchen" checked>
+                  <span class="sw-track"><span class="sw-thumb"></span></span>
+                </label>
+              </div>
+              <div class="rt-row">
+                <span class="rt-name">Bath</span>
+                <label class="sw" aria-label="Bathroom lights">
+                  <input type="checkbox" class="sw-input" data-room="bathroom" checked>
+                  <span class="sw-track"><span class="sw-thumb"></span></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="lights-ctrl">
+              <div class="arc-wrap" aria-label="Master brightness">
+                <svg id="arc-svg" viewBox="0 0 120 72" data-cursor="adjust">
+                  <path d="M10 68 A52 52 0 0 1 110 68" class="arc-track" fill="none"/>
+                  <path id="arc-fill" d="M10 68 A52 52 0 0 1 110 68" class="arc-fill" fill="none"/>
+                  <circle id="arc-thumb" cx="10" cy="68" r="7" class="arc-thumb"/>
+                  <text id="arc-val" x="60" y="54" class="arc-val mono" text-anchor="middle">80%</text>
+                  <text x="60" y="65" class="arc-unit" text-anchor="middle">Brightness</text>
+                </svg>
+              </div>
+              <div class="ct-wrap">
+                <div class="ct-hd">
+                  <span class="ct-label">Color Temp</span>
+                  <span class="mono ct-val" id="ct-val">3200K</span>
+                </div>
+                <div class="ct-strip" id="ct-strip" data-cursor="adjust" role="slider"
+                     aria-label="Color temperature" aria-valuemin="2200" aria-valuemax="6500" aria-valuenow="3200" tabindex="0">
+                  <div class="ct-thumb" id="ct-thumb"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Climate -->
+        <article class="tile tile-climate reveal-item" aria-labelledby="clh" data-domain="climate">
+          <header class="tile-hd">
+            <div class="tile-ttl-grp">
+              <span class="tile-ico" aria-hidden="true">
+                <svg viewBox="0 0 18 18" fill="none">
+                  <path d="M9 3v8" stroke-linecap="round"/>
+                  <circle cx="9" cy="13.5" r="2.5"/>
+                  <path d="M6.5 6h-2M6.5 8.5H5M6.5 11H5" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <h3 id="clh" class="tile-title">Climate</h3>
+            </div>
+            <span class="tile-stat mono" id="climate-stat">Active</span>
+          </header>
+          <div class="climate-body">
+            <div class="thermo-wrap" data-cursor="adjust">
+              <svg id="thermo-svg" viewBox="0 0 180 180" role="slider" aria-label="Temperature"
+                   aria-valuemin="16" aria-valuemax="30" aria-valuenow="21" tabindex="0">
+                <!-- Background -->
+                <circle cx="90" cy="90" r="78" class="thermo-bg"/>
+                <circle cx="90" cy="90" r="62" class="thermo-inner"/>
+                <!-- Track arc (270°, starts at 135°) -->
+                <circle cx="90" cy="90" r="75" class="thermo-track" fill="none"
+                  stroke-dasharray="473 94" transform="rotate(135 90 90)"/>
+                <!-- Fill arc -->
+                <circle cx="90" cy="90" r="75" id="thermo-fill" class="thermo-fill-arc" fill="none"
+                  stroke-dasharray="0 9999" transform="rotate(135 90 90)"/>
+                <!-- Humidity track -->
+                <circle cx="90" cy="90" r="64" class="hum-track" fill="none"
+                  stroke-dasharray="403 80" transform="rotate(135 90 90)"/>
+                <circle cx="90" cy="90" r="64" id="hum-fill" class="hum-fill-arc" fill="none"
+                  stroke-dasharray="0 9999" transform="rotate(135 90 90)"/>
+                <!-- Drag thumb -->
+                <circle id="thermo-thumb" cx="17.4" cy="127.1" r="7" class="thermo-thumb"/>
+                <!-- Center text -->
+                <text id="thermo-temp" x="90" y="82" class="thermo-temp-txt mono" text-anchor="middle">21°</text>
+                <text x="90" y="97" class="thermo-unit mono" text-anchor="middle">CELSIUS</text>
+                <text id="thermo-hum" x="90" y="110" class="thermo-hum mono" text-anchor="middle">68% RH</text>
+                <!-- Forecast -->
+                <circle cx="48" cy="148" r="3" class="fc-dot"/>
+                <circle cx="66" cy="146" r="3" class="fc-dot"/>
+                <circle cx="84" cy="144" r="3" class="fc-dot active"/>
+                <circle cx="102" cy="145" r="3" class="fc-dot"/>
+                <circle cx="120" cy="147" r="3" class="fc-dot"/>
+                <circle cx="138" cy="149" r="3" class="fc-dot"/>
+              </svg>
+            </div>
+            <button class="ai-pill" id="ai-pill" data-cursor="activate">
+              <span class="ai-dot" aria-hidden="true"></span>
+              <span>AI suggests 21°C</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Security -->
+        <article class="tile tile-security reveal-item" aria-labelledby="sch" data-domain="security">
+          <header class="tile-hd">
+            <div class="tile-ttl-grp">
+              <span class="tile-ico" aria-hidden="true">
+                <svg viewBox="0 0 18 18" fill="none">
+                  <path d="M9 2L16.5 5v4.5C16.5 13.5 13 16.5 9 17.5 5 16.5 1.5 13.5 1.5 9.5V5Z" stroke-linejoin="round"/>
+                  <path d="M6.5 9l2 2 3.5-3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <h3 id="sch" class="tile-title">Security</h3>
+            </div>
+            <span class="tile-stat mono status-ok" id="sec-stat">Secured</span>
+          </header>
+          <div class="sec-body">
+            <div class="seg-ctrl" role="radiogroup" aria-label="Security mode" id="seg-ctrl">
+              <button class="seg active" data-mode="home" role="radio" aria-checked="true">Home</button>
+              <button class="seg" data-mode="away" role="radio" aria-checked="false">Away</button>
+              <button class="seg" data-mode="night" role="radio" aria-checked="false">Night</button>
+              <div class="seg-ind" aria-hidden="true"></div>
+            </div>
+            <div class="cam-mock" aria-label="Front door camera" role="img">
+              <div class="cam-noise" aria-hidden="true"></div>
+              <div class="cam-scanline" aria-hidden="true"></div>
+              <div class="cam-sil" aria-hidden="true"></div>
+              <div class="cam-ui" aria-hidden="true">
+                <span class="mono cam-ts" id="cam-ts">00:00:00</span>
+                <span class="mono cam-id">FRONT · CAM 01</span>
+                <span class="cam-rec" aria-hidden="true"></span>
+              </div>
+            </div>
+            <ul class="sensor-list" role="list" aria-label="Sensors">
+              <li class="sensor-row" data-st="ok">
+                <span class="s-dot" aria-hidden="true"></span>
+                <span class="s-name">Front Door</span>
+                <span class="s-val mono">Locked</span>
+              </li>
+              <li class="sensor-row" data-st="warn" id="s-garage">
+                <span class="s-dot warn-dot" aria-hidden="true"></span>
+                <span class="s-name">Garage</span>
+                <span class="s-val mono warn-txt">Open 2h</span>
+                <button class="s-info-btn" aria-label="Garage sensor details" data-cursor="inspect" id="s-info-btn">
+                  <svg viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <circle cx="6" cy="6" r="5"/>
+                    <path d="M6 5v4" stroke-linecap="round"/>
+                    <circle cx="6" cy="3.2" r=".7" fill="currentColor"/>
+                  </svg>
+                </button>
+              </li>
+              <li class="sensor-row" data-st="ok">
+                <span class="s-dot" aria-hidden="true"></span>
+                <span class="s-name">Windows (4)</span>
+                <span class="s-val mono">All Closed</span>
+              </li>
+              <li class="sensor-row" data-st="ok">
+                <span class="s-dot" aria-hidden="true"></span>
+                <span class="s-name">Motion</span>
+                <span class="s-val mono">Living Room</span>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Energy -->
+        <article class="tile tile-energy reveal-item" aria-labelledby="enh">
+          <header class="tile-hd">
+            <div class="tile-ttl-grp">
+              <span class="tile-ico" aria-hidden="true">
+                <svg viewBox="0 0 18 18" fill="none">
+                  <path d="M10 2L4.5 10H9L8 16 13.5 8H9Z" stroke-linejoin="round" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <h3 id="enh" class="tile-title">Energy</h3>
+            </div>
+            <div class="period-grp" role="group" aria-label="Energy period">
+              <button class="period-btn active" data-period="today">Today</button>
+              <button class="period-btn" data-period="week">7-Day</button>
+              <button class="period-btn" data-period="month">Month</button>
+            </div>
+          </header>
+          <div class="energy-body">
+            <div class="energy-nums">
+              <div class="en-stat">
+                <span class="mono en-big" id="en-total">18.4</span>
+                <span class="en-unit">kWh today</span>
+              </div>
+              <div class="en-stat">
+                <span class="mono en-delta pos">↓ 23%</span>
+                <span class="en-unit">vs. average</span>
+              </div>
+            </div>
+            <div class="chart-wrap" role="img" aria-label="Energy consumption chart">
+              <svg id="en-chart" viewBox="0 0 460 110" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" class="cg-top"/>
+                    <stop offset="100%" class="cg-bot"/>
+                  </linearGradient>
+                  <clipPath id="chart-clip">
+                    <rect id="chart-clip-rect" x="0" y="0" width="0" height="110"/>
+                  </clipPath>
+                </defs>
+                <line x1="0" y1="22" x2="460" y2="22" class="ch-grid"/>
+                <line x1="0" y1="55" x2="460" y2="55" class="ch-grid"/>
+                <line x1="0" y1="88" x2="460" y2="88" class="ch-grid"/>
+                <text x="2" y="20" class="ch-lbl mono">4kW</text>
+                <text x="2" y="53" class="ch-lbl mono">2kW</text>
+                <text x="2" y="86" class="ch-lbl mono">1kW</text>
+                <path id="ch-fill" class="ch-fill" clip-path="url(#chart-clip)"/>
+                <path id="ch-line" class="ch-line" clip-path="url(#chart-clip)"/>
+                <line id="ch-guide" x1="0" y1="0" x2="0" y2="110" class="ch-guide" opacity="0"/>
+                <circle id="ch-point" cx="0" cy="0" r="4.5" class="ch-point" opacity="0"/>
+                <text x="18" y="107" class="ch-lbl mono">00</text>
+                <text x="95" y="107" class="ch-lbl mono">04</text>
+                <text x="173" y="107" class="ch-lbl mono">08</text>
+                <text x="250" y="107" class="ch-lbl mono">12</text>
+                <text x="328" y="107" class="ch-lbl mono">16</text>
+                <text x="405" y="107" class="ch-lbl mono">20</text>
+              </svg>
+              <div class="ch-tooltip" id="ch-tip" role="tooltip" aria-live="polite">
+                <span class="mono tip-time">12:00</span>
+                <span class="mono tip-val">2.4 kWh</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- AURA Intelligence -->
+        <article class="tile tile-aura reveal-item" aria-labelledby="aih">
+          <header class="tile-hd">
+            <div class="tile-ttl-grp">
+              <h3 id="aih" class="tile-title">AURA Intelligence</h3>
+            </div>
+            <span class="tile-stat mono">Active</span>
+          </header>
+          <div class="aura-body">
+            <div class="aura-orb" id="aura-orb" data-cursor="expand">
+              <div class="orb-l ol-1" aria-hidden="true"></div>
+              <div class="orb-l ol-2" aria-hidden="true"></div>
+              <div class="orb-l ol-3" aria-hidden="true"></div>
+            </div>
+            <div class="insights-mask" aria-live="polite" aria-label="AI insights">
+              <p class="insight active" id="ins-0">You save <strong>23%</strong> energy vs. similar homes</p>
+              <p class="insight" id="ins-1">Bedroom is <strong>warmer</strong> than usual — adjust?</p>
+              <p class="insight" id="ins-2">Front door open <strong>2h</strong> — unusual pattern</p>
+              <p class="insight" id="ins-3">Evening detected — preparing <strong>Cinema</strong> mode</p>
+              <p class="insight" id="ins-4">Air quality is <strong>excellent</strong> · 23 AQI</p>
+              <p class="insight" id="ins-5">Solar forecast: <strong>4.2 kWh</strong> expected today</p>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Devices -->
+    <section id="devices" class="s-devices" aria-labelledby="dev-h2">
+      <div class="section-header reveal-item">
+        <h2 id="dev-h2" class="section-title">Connected <em>devices</em></h2>
+        <p class="section-sub">Eight devices, one nervous system.</p>
+      </div>
+      <div class="dev-gallery" role="list">
+
+        <article class="dev-card" data-dev="thermostat" role="listitem" data-cursor="inspect">
+          <div class="dev-art" aria-hidden="true">
+            <div class="da-thermo">
+              <div class="da-ring r1"></div><div class="da-ring r2"></div><div class="da-dot"></div>
+            </div>
+          </div>
+          <div class="dev-info">
+            <h3 class="dev-name">Smart Thermostat</h3>
+            <p class="mono dev-id">AURA-TH-001</p>
+            <p class="dev-status online">Online · 21.4°C</p>
+          </div>
+        </article>
+
+        <article class="dev-card" data-dev="hub" role="listitem" data-cursor="inspect">
+          <div class="dev-art" aria-hidden="true">
+            <div class="da-hub">
+              <div class="da-hex"></div><div class="da-pulse-ring"></div>
+            </div>
+          </div>
+          <div class="dev-info">
+            <h3 class="dev-name">Central Hub</h3>
+            <p class="mono dev-id">AURA-HB-001</p>
+            <p class="dev-status online">Online · 14 nodes</p>
+          </div>
+        </article>
+
+        <article class="dev-card" data-dev="lights" role="listitem" data-cursor="inspect">
+          <div class="dev-art" aria-hidden="true">
+            <div class="da-light">
+              <div class="da-bulb"></div><div class="da-glow-ring"></div>
+            </div>
+          </div>
+          <div class="dev-info">
+            <h3 class="dev-name">Living Lights</h3>
+            <p class="mono dev-id">AURA-LT-001</p>
+            <p class="dev-status online">Online · 80% · 3200K</p>
+          </div>
+        </article>
+
+        <article class="dev-card" data-dev="camera" role="listitem" data-cursor="inspect">
+          <div class="dev-art" aria-hidden="true">
+            <div class="da-cam">
+              <div class="da-lens"></div><div class="da-lens-inner"></div>
+            </div>
+          </div>
+          <div class="dev-info">
+            <h3 class="dev-name">Front Camera</h3>
+            <p class="mono dev-id">AURA-CV-001</p>
+            <p class="dev-status online">Online · Recording</p>
+          </div>
+        </article>
+
+        <article class="dev-card" data-dev="door" role="listitem" data-cursor="inspect">
+          <div class="dev-art" aria-hidden="true">
+            <div class="da-sensor">
+              <div class="da-bar b1"></div><div class="da-bar b2"></div>
+            </div>
+          </div>
+          <div class="dev-info">
+            <h3 class="dev-name">Door Sensor</h3>
+            <p class="mono dev-id">AURA-DS-001</p>
+            <p class="dev-status online">Online · Locked</p>
+          </div>
+        </article>
+
+        <article class="dev-card" data-dev="audio" role="listitem" data-cursor="inspect">
+          <div class="dev-art" aria-hidden="true">
+            <div class="da-speaker">
+              <div class="da-circle c1"></div><div class="da-circle c2"></div><div class="da-circle c3"></div>
+            </div>
+          </div>
+          <div class="dev-info">
+            <h3 class="dev-name">Audio System</h3>
+            <p class="mono dev-id">AURA-AU-001</p>
+            <p class="dev-status online">Online · Standby</p>
+          </div>
+        </article>
+
+        <article class="dev-card" data-dev="air" role="listitem" data-cursor="inspect">
+          <div class="dev-art" aria-hidden="true">
+            <div class="da-air">
+              <div class="da-wave w1"></div><div class="da-wave w2"></div><div class="da-wave w3"></div>
+            </div>
+          </div>
+          <div class="dev-info">
+            <h3 class="dev-name">Air Quality</h3>
+            <p class="mono dev-id">AURA-AQ-001</p>
+            <p class="dev-status online">Online · 23 AQI</p>
+          </div>
+        </article>
+
+        <article class="dev-card" data-dev="blind" role="listitem" data-cursor="inspect">
+          <div class="dev-art" aria-hidden="true">
+            <div class="da-blind">
+              <div class="da-slat sl1"></div><div class="da-slat sl2"></div><div class="da-slat sl3"></div>
+            </div>
+          </div>
+          <div class="dev-info">
+            <h3 class="dev-name">Smart Blinds</h3>
+            <p class="mono dev-id">AURA-BL-001</p>
+            <p class="dev-status online">Online · Open 60%</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Automation Timeline -->
+    <section id="timeline" class="s-timeline" aria-labelledby="tl-h2">
+      <div class="section-header reveal-item">
+        <h2 id="tl-h2" class="section-title">A day in your <em>home</em></h2>
+        <p class="section-sub">Automated routines that run without interruption.</p>
+      </div>
+      <div class="tl-wrap">
+        <div class="tl-spine" aria-hidden="true"><div class="tl-line" id="tl-line"></div></div>
+        <div class="tl-events">
+
+          <div class="tl-event" data-reveal>
+            <div class="tl-node" aria-hidden="true"><div class="tl-dot"></div></div>
+            <article class="tl-card">
+              <div class="tl-ico" aria-hidden="true">
+                <svg viewBox="0 0 56 56" fill="none">
+                  <circle cx="28" cy="30" r="12" fill="oklch(0.82 0.15 75)" opacity="0.9"/>
+                  <path d="M28 18V10" stroke="oklch(0.82 0.15 75)" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M36 22l5-5" stroke="oklch(0.82 0.15 75)" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M20 22l-5-5" stroke="oklch(0.82 0.15 75)" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="4" y1="40" x2="52" y2="40" stroke="currentColor" stroke-opacity="0.15"/>
+                </svg>
+              </div>
+              <div class="tl-content">
+                <time class="mono tl-time">06:00</time>
+                <h3 class="tl-title">Morning Wake</h3>
+                <p class="tl-desc">Bedroom lights rise to 40% warm. Thermostat steps to 21°. Blinds open 30%.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="tl-event" data-reveal>
+            <div class="tl-node" aria-hidden="true"><div class="tl-dot"></div></div>
+            <article class="tl-card">
+              <div class="tl-ico" aria-hidden="true">
+                <svg viewBox="0 0 56 56" fill="none">
+                  <rect x="18" y="20" width="20" height="24" rx="2" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.5"/>
+                  <path d="M28 44v6" stroke="currentColor" stroke-opacity="0.5" stroke-linecap="round" stroke-width="1.5"/>
+                  <path d="M23 10Q28 6 33 10" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                  <line x1="28" y1="10" x2="28" y2="20" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="tl-content">
+                <time class="mono tl-time">08:00</time>
+                <h3 class="tl-title">Departure</h3>
+                <p class="tl-desc">Away mode. All lights off. Thermostat to 18°. Full perimeter monitoring active.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="tl-event" data-reveal>
+            <div class="tl-node" aria-hidden="true"><div class="tl-dot"></div></div>
+            <article class="tl-card">
+              <div class="tl-ico" aria-hidden="true">
+                <svg viewBox="0 0 56 56" fill="none">
+                  <circle cx="28" cy="28" r="5" fill="oklch(0.82 0.15 75)" opacity="0.9"/>
+                  <circle cx="28" cy="28" r="11" stroke="oklch(0.82 0.15 75)" stroke-width="1.2" fill="none" opacity="0.5"/>
+                  <circle cx="28" cy="28" r="18" stroke="oklch(0.82 0.15 75)" stroke-width="0.7" fill="none" opacity="0.25"/>
+                  <path d="M10 28H20M36 28H46" stroke="oklch(0.82 0.15 75)" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+                </svg>
+              </div>
+              <div class="tl-content">
+                <time class="mono tl-time">18:00</time>
+                <h3 class="tl-title">Return Home</h3>
+                <p class="tl-desc">Geofence triggers. Living lights warm to 60%. Thermostat rises to 21°.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="tl-event" data-reveal>
+            <div class="tl-node" aria-hidden="true"><div class="tl-dot"></div></div>
+            <article class="tl-card">
+              <div class="tl-ico" aria-hidden="true">
+                <svg viewBox="0 0 56 56" fill="none">
+                  <path d="M34 14Q22 18 20 28Q18 38 28 42Q16 44 10 36Q4 26 10 18Q17 10 34 14Z" fill="currentColor" opacity="0.65"/>
+                  <circle cx="40" cy="16" r="2" fill="currentColor" opacity="0.45"/>
+                  <circle cx="44" cy="24" r="1.5" fill="currentColor" opacity="0.35"/>
+                  <circle cx="38" cy="26" r="1" fill="currentColor" opacity="0.3"/>
+                </svg>
+              </div>
+              <div class="tl-content">
+                <time class="mono tl-time">22:00</time>
+                <h3 class="tl-title">Sleep Mode</h3>
+                <p class="tl-desc">All lights fade off over 20 minutes. Temperature to 18°. Do not disturb.</p>
+              </div>
+            </article>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-line"><em class="fraunces-italic">Made quietly, in one afternoon.</em></p>
+      <div class="footer-meta">
+        <span class="mono footer-credit">AURA v1.0 · 2024</span>
+        <span class="mono footer-credit">Zero Dependencies · Vanilla JS</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sensor Modal -->
+  <div class="modal-bg" id="modal-bg" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal-panel" id="modal-panel">
+      <button class="modal-close-btn" id="modal-close" aria-label="Close" data-cursor="close">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <h2 id="modal-title" class="modal-title">Garage Sensor</h2>
+      <p class="modal-body">The garage has been open <strong>2h 14m</strong> — outside your usual pattern. Flagged at 16:42.</p>
+      <div class="modal-stats">
+        <div class="mstat"><span class="mono mstat-val">2h 14m</span><span class="mstat-lbl">Duration</span></div>
+        <div class="mstat"><span class="mono mstat-val">16:42</span><span class="mstat-lbl">Last change</span></div>
+        <div class="mstat"><span class="mono mstat-val">94%</span><span class="mstat-lbl">Confidence</span></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-ghost" id="modal-ack">Acknowledge</button>
+        <button class="btn-primary" id="modal-close-door">Close Garage</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat orb (prominent CTA, now larger and more central) -->
+  <button class="chat-orb prominent" id="chat-orb" aria-label="Open AURA assistant">
+    <div class="chat-orb-inner">
+      <div class="cop-1" aria-hidden="true"></div>
+      <div class="cop-2" aria-hidden="true"></div>
+      <div class="cop-3" aria-hidden="true"></div>
+      <svg class="co-spark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" fill="currentColor"/>
+        <path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z" fill="currentColor" opacity="0.7"/>
+      </svg>
+    </div>
+    <span class="chat-orb-label">Need help? <strong>Ask AURA</strong></span>
+  </button>
+
+  <!-- Chat panel -->
+  <div class="chat-panel" id="chat-panel" role="dialog" aria-modal="true" aria-labelledby="chat-h" hidden>
+    <div class="chat-inner">
+      <header class="chat-hd">
+        <div>
+          <h2 id="chat-h" class="chat-title">AURA</h2>
+          <p class="mono chat-sub">Natural language control</p>
+        </div>
+        <button class="chat-x" id="chat-close" aria-label="Close assistant">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </header>
+      <div class="chat-msgs" id="chat-msgs" role="log" aria-live="polite">
+        <div class="msg msg-a">
+          <p>Good evening. I'm watching over your home. What would you like to adjust?</p>
+        </div>
+      </div>
+      <div class="typing-ind" id="typing-ind" aria-live="polite" hidden>
+        <span class="td"></span><span class="td"></span><span class="td"></span>
+      </div>
+      <div class="chat-foot">
+        <div class="chat-inp-wrap">
+          <input type="text" class="chat-inp" id="chat-inp" placeholder="Try: 'goodnight' or 'set temp to 22'"
+                 aria-label="Message AURA" autocomplete="off" spellcheck="false">
+          <button class="chat-send" id="chat-send" aria-label="Send">
+            <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path d="M3 9h12M9 4l6 5-6 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="chat-chips" role="group" aria-label="Quick commands">
+          <button class="chip" data-msg="goodnight">goodnight</button>
+          <button class="chip" data-msg="i'm leaving">i'm leaving</button>
+          <button class="chip" data-msg="cinema mode">cinema mode</button>
+          <button class="chip" data-msg="turn off all lights">lights off</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio toggle -->
+  <button class="audio-btn" id="audio-btn" aria-label="Toggle sound feedback" title="Sound feedback">
+    <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">
+      <path d="M3.5 6.5H7L11 3v12L7 11.5H3.5Z" class="spk-body" stroke-linejoin="round"/>
+      <path d="M13.5 6.5q2 2.5 0 5" class="spk-w1" stroke-linecap="round"/>
+      <path d="M15.5 4.5q3 4.5 0 9" class="spk-w2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- Quick Actions Bar -->
+  <div class="quick-actions" id="quick-actions">
+    <button class="qa-btn" onclick="document.getElementById('chat-orb').focus();document.getElementById('chat-orb').click();">
+      <span class="qa-ico">💬</span>
+      <span class="qa-label">Ask AURA</span>
+    </button>
+    <a href="#controls" class="qa-btn"><span class="qa-ico">🎛️</span><span class="qa-label">Scenes</span></a>
+    <a href="#devices" class="qa-btn"><span class="qa-ico">🔌</span><span class="qa-label">Devices</span></a>
+    <a href="#timeline" class="qa-btn"><span class="qa-ico">⏰</span><span class="qa-label">Automations</span></a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
